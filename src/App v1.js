@@ -33,23 +33,18 @@ function formatDay(dateStr) {
 }
 
 class App extends React.Component {
-  state = {
-    location: "",
-    isLoading: false,
-    displayLocation: "",
-    weather: {},
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      location: "lagos",
+      isLoading: false,
+      displayLocation: "",
+      weather: {},
+    };
+    this.fetchWeather = this.fetchWeather.bind(this);
+  }
 
-  // constructor(props) {
-  //   super(props);
-
-  //   this.fetchWeather = this.fetchWeather.bind(this);
-  // }
-
-  // async fetchWeather() {
-  fetchWeather = async () => {
-    if (this.state.location.length < 2) return this.setState({ weather: {} });
-
+  async fetchWeather() {
     try {
       // Set Loading state
       this.setState({ isLoading: true });
@@ -77,25 +72,9 @@ class App extends React.Component {
       this.setState({ weather: weatherData.daily });
     } catch (err) {
       // console.log(err.message);
-      console.error(err);
+      console.err(err);
     } finally {
       this.setState({ isLoading: false });
-    }
-  };
-
-  // useEffect []
-  componentDidMount() {
-    // this.fetchWeather();
-
-    this.setState({ location: localStorage.getItem("location") || "" });
-  }
-
-  // useEffect [location]
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.location !== prevState.location) {
-      this.fetchWeather();
-
-      localStorage.setItem("location", this.state.location);
     }
   }
 
@@ -111,7 +90,7 @@ class App extends React.Component {
             onChange={(e) => this.setState({ location: e.target.value })}
           />
         </div>
-        {/* <button onClick={this.fetchWeather}>Get Weather</button> */}
+        <button onClick={this.fetchWeather}>Get Weather</button>
 
         {this.state.isLoading && <p className="loader">Loading...</p>}
 
